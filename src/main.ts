@@ -1,114 +1,66 @@
-import { Router, Plugin, RouteHandler, renderTemplate, EnhancedServerResponse  } from "./nodeHttpRouter";
+import pkg from 'pg';
+const { Pool } = pkg;
+import * as dotenv from 'dotenv';
+import { Router, renderTemplate, enhanceResponse, parseBody, Plugin, RouteHandler, EnhancedServerResponse } from "./nodeHttpRouter"
+import { console } from 'node:inspector';
 
-const router = new Router();
+// Load .env variables
+dotenv.config();
 
-// Global Plugin: Logs each request
-const loggerPlugin: Plugin = {
-  name: "Logger",
-  handler: async (req, res) => {
-    console.log(`Request received: ${req.method} ${req.url}`);
-    return true; // Allow default handler to proceed
-  },
-};
+// Create a connection pool
+const pool = new Pool({
+    user: process.env.USERNAME,
+    host: process.env.HOST,
+    database: process.env.DATABASE,
+    password: process.env.PASSWORD,
+    port: process.env.PORT,
+});
 
-// Route Plugin: Checks authentication
-const authPlugin: Plugin = {
-  name: "Auth",
-  handler: async (req, res) => {
-    const isAuthenticated = req.headers["x-auth-token"] === "valid-token";
-    if (!isAuthenticated) {
-      res.writeHead(401, { "Content-Type": "text/plain" });
-      res.end("Unauthorized");
-      return false; // Halt the request
+// Function to query the database
+const queryDatabase = async (query: string, params: any[] = []): Promise<any> => {
+    try {
+        const client = await pool.connect();
+        try {
+            const result = await client.query(query, params);
+            return result.rows;
+        } finally {
+            client.release(); // Release the connection back to the pool
+        }
+    } catch (err) {
+        console.error('Database query error', err);
+        throw err;
     }
-    return true; // Allow default handler to proceed
-  },
+};
+let isConnected = false;
+console.log('Connecting...');
+pool.on('connect', pool => {
+    console.error('Connection successful');
+    isConnected = true;
+});
+
+while(!isConnected){};
+
+let router = new Router()
+
+let logger: Plugin = {
+    name: "logger",
+    handler: async (req, res, params, query) => {
+        const ip = req.headers['x-forwarded-for'] ||
+               req.socket.remoteAddress;
+        console.log('Received %s request on path %s from ip %s', req.method, req.url, ip)
+        return true;
+      },
 };
 
-// Add global plugin
-router.addGlobalPlugin(loggerPlugin);
+router.addGlobalPlugin(logger);
 
-// Route: Static greeting
-router.addRoute(
-  "GET",
-  "/greet",
-  (req, res) => {
-    res.end("Hello, welcome to our server!");
-  },
-  [authPlugin] // Auth plugin applied to this route
-);
+router.addRoute('GET', '/', (req, res, param, query) => {
+    res.writeHead(200)
+    res.end("Hello World")
+})
 
-// Route: Render a dynamic template
-router.addRoute(
-  "GET",
-  "/template",
-  async (req, res) => {
-    await renderTemplate("example.html", { name: "Weston" });
-  }
-);
-
-// Route: JSON body parsing and response
-router.addRoute("POST", "/submit", async (req, res, params, query, body) => {
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify({ received: body }));
-});
-
-// Route: Redirect example
-router.addRoute("GET", "/redirect", (req, res) => {
-    (res as EnhancedServerResponse).redirect("/greet");
-});
-
-// Route with parameters
-router.addRoute(
-  "GET",
-  "/user/:id",
-  (req, res, params) => {
-    res.end(`User ID: ${params?.id}`);
-  }
-);
-
-// Add a custom 404 error handler
-router.addErrorHandler(404, async (req, res, params, query, context) => {
-    res.statusCode = 404;
-    res.end("Custom 404: Page not found!");
-  });
-  
-  // Add a custom 500 error handler
-  router.addErrorHandler(500, async (req, res, params, query, context) => {
-    const errorMessage = context?.error || "Unknown error occurred.";
-    res.statusCode = 500;
-    res.end(`Custom 500: Internal Server Error. Details: ${errorMessage}`);
-  });
-
-// Test cases
-const testCases = [
-  {
-    name: "Match /greet",
-    method: "GET",
-    path: "/greet",
-    expectedMatch: true,
-  },
-  {
-    name: "Match /user/123 with params",
-    method: "GET",
-    path: "/user/123",
-    expectedMatch: true,
-    expectedParams: { id: "123" },
-  },
-  {
-    name: "No match for invalid route",
-    method: "GET",
-    path: "/invalid",
-    expectedMatch: false,
-  },
-];
-
-// Run tests
-const results = router.runTests(testCases);
-router.printTestResults(results);
-
-// Start the server
 const server = router.createServer();
-server.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
-});
+console.log("hi :)")
+server.listen(8000, '0.0.0.0', () => {
+    console.log('Listening on port 8000');
+  });
