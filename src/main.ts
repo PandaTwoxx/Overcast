@@ -31,14 +31,6 @@ const queryDatabase = async (query: string, params: any[] = []): Promise<any> =>
         throw err;
     }
 };
-let isConnected = false;
-console.log('Connecting...');
-pool.on('connect', pool => {
-    console.error('Connection successful');
-    isConnected = true;
-});
-
-while(!isConnected){};
 
 let router = new Router()
 
@@ -54,10 +46,38 @@ let logger: Plugin = {
 
 router.addGlobalPlugin(logger);
 
-router.addRoute('GET', '/', (req, res, param, query) => {
-    res.writeHead(200)
-    res.end("Hello World")
-})
+router.addRoute('GET', '/', async (req, res, params, query) => {
+    let enhancedRes = enhanceResponse(res);
+    await enhancedRes.renderTemplate('index.html', { title: 'Home' });
+});
+
+router.addRoute('GET', '/dev', async (req, res, params, query) => {
+
+});
+
+
+router.addRoute('GET', '/stream', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    const sendEvent = (data: string) => {
+        res.write(`data: ${data}\n\n`);
+    };
+
+    // Example: Send a message every second
+    const intervalId = setInterval(() => {
+        sendEvent(JSON.stringify({ message: 'Hello from server' }));
+    }, 1000);
+
+    req.on('close', () => {
+        clearInterval(intervalId);
+        res.end();
+    });
+});
+
+router.addDirectory('public');
 
 const server = router.createServer();
 console.log("hi :)")
