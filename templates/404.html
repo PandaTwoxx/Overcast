@@ -19,5 +19,32 @@
           </div>
         </div>
       </main>
+      $(if(isAdmin){
+        <div class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-white rounded-full p-4 shadow-lg flex space-x-4">
+          <button class="bg-indigo-600 text-white rounded-full px-4 py-2 hover:bg-indigo-500">IT Chat</button>
+          <button class="bg-indigo-600 text-white rounded-full px-4 py-2 hover:bg-indigo-500">Settings</button>
+          <button class="bg-indigo-600 text-white rounded-full px-4 py-2 hover:bg-indigo-500">Hide Panel</button>
+          <button class="bg-indigo-600 text-white rounded-full px-4 py-2 hover:bg-indigo-500">Error Logs</button>
+        </div>
+      });
+      $(if(isDevMode){
+        <script>
+          const eventSource = new EventSource('/404');
+   
+          eventSource.onmessage = function(event) {
+              const data = JSON.parse(event.data);
+              if (data.html) {
+                  document.getElementById('content').innerHTML = data.html;
+              } else if (data.error) {
+                  console.error('Error from server:', data.error);
+              }
+          };
+   
+          eventSource.onerror = function(error) {
+              console.error('EventSource failed:', error);
+              eventSource.close(); // Optionally close the connection on error
+          };
+          </script>
+      });
 </body>
 </html>
