@@ -88,6 +88,7 @@ function pullFile(filePath) {
 class Router {
     constructor() {
         this.routes = [];
+        this.streamingRoutes = []; // New array for streaming routes
         this.globalPlugins = [];
     }
     // Add a global plugin
@@ -106,7 +107,7 @@ class Router {
                 const result = await plugin.handler(req, enhancedRes, params, query, body);
                 if (result === false)
                     return; // Halt the request if the plugin returns false
-                if (result !== true)
+                if (typeof result === 'function')
                     handler = result; // Override handler if plugin provides a new one
             }
             // Run custom plugins
@@ -114,7 +115,7 @@ class Router {
                 const result = await plugin.handler(req, enhancedRes, params, query, body);
                 if (result === false)
                     return; // Halt the request if the plugin returns false
-                if (result !== true)
+                if (typeof result === 'function')
                     handler = result; // Override handler if plugin provides a new one
             }
             // Run the final (possibly overridden) route handler
@@ -125,6 +126,38 @@ class Router {
             }
         };
         this.routes.push({ methods: normalizedMethods, path, handler: wrappedHandler });
+    }
+    /**
+     * Adds a route for streaming data to the client with plugin support.
+     * @param method The HTTP method for the route (typically 'GET').
+     * @param path The URL path for the route.
+     * @param handler The function that will handle the streaming logic.
+     * @param customPlugins Optional array of plugins for this route.
+     */
+    addStreamRoute(method, path, handler, customPlugins = []) {
+        const normalizedMethod = method.toUpperCase();
+        const wrappedHandler = async (req, res, params, query) => {
+            const enhancedRes = res;
+            // Run global plugins
+            for (const plugin of this.globalPlugins) {
+                const result = await plugin.handler(req, enhancedRes, params, query, undefined); // Body is undefined for streaming
+                if (result === false)
+                    return; // Halt the request if the plugin returns false
+                if (typeof result === 'function')
+                    handler = result; // Override handler if plugin provides a new one
+            }
+            // Run custom plugins
+            for (const plugin of customPlugins) {
+                const result = await plugin.handler(req, enhancedRes, params, query, undefined); // Body is undefined for streaming
+                if (result === false)
+                    return; // Halt the request if the plugin returns false
+                if (typeof result === 'function')
+                    handler = result; // Override handler if plugin provides a new one
+            }
+            // Run the final (possibly overridden) route handler
+            handler(req, res, params, query);
+        };
+        this.streamingRoutes.push({ method: normalizedMethod, path, handler: wrappedHandler });
     }
     /**
      * Adds routes for serving static files from a directory.
@@ -185,19 +218,50 @@ class Router {
         }
         return null;
     }
+    // Match streaming route
+    matchStreamingRoute(method, url) {
+        const normalizedMethod = method.toUpperCase();
+        for (const route of this.streamingRoutes) {
+            const paramNames = [];
+            const regexPath = route.path.replace(/:[^\s/]+/g, (match) => {
+                paramNames.push(match.slice(1));
+                return "([^/]+)";
+            });
+            const regex = new RegExp(`^${regexPath}$`);
+            const match = url.match(regex);
+            if (match && route.method === normalizedMethod) {
+                const params = {};
+                paramNames.forEach((name, index) => {
+                    params[name] = match[index + 1];
+                });
+                return { handler: route.handler, params };
+            }
+        }
+        return null;
+    }
     handleRequest(req, res) {
         const enhancedRes = enhanceResponse(res);
         const url = new URL(req.url || "", `http://${req.headers.host}`);
-        const match = this.matchRoute(req.method || "", url.pathname);
-        if (match) {
+        const method = req.method || "";
+        const pathname = url.pathname;
+        const routeMatch = this.matchRoute(method, pathname);
+        const streamMatch = this.matchStreamingRoute(method, pathname);
+        if (routeMatch) {
             const query = Object.fromEntries(url.searchParams.entries());
             parseBody(req)
-                .then((body) => match.handler(req, enhancedRes, match.params, query, body))
+                .then((body) => routeMatch.handler(req, enhancedRes, routeMatch.params, query, body))
                 .catch((error) => {
                 enhancedRes.statusCode = 500;
                 enhancedRes.end("Internal Server Error");
                 console.error("Request handling error:", error);
             });
+        }
+        else if (streamMatch) {
+            // Handle streaming route
+            res.setHeader('Content-Type', 'text/event-stream');
+            res.setHeader('Cache-Control', 'no-cache');
+            res.setHeader('Connection', 'keep-alive');
+            streamMatch.handler(req, res, streamMatch.params, Object.fromEntries(url.searchParams.entries()));
         }
         else {
             enhancedRes.statusCode = 404;
@@ -284,18 +348,28 @@ class Router {
         return http.createServer(async (req, res) => {
             const enhancedRes = enhanceResponse(res); // Enhance the response object
             const url = new URL(req.url || "", `http://${req.headers.host}`);
-            const match = this.matchRoute(req.method || "", url.pathname);
-            if (match) {
+            const method = req.method || "";
+            const pathname = url.pathname;
+            const routeMatch = this.matchRoute(method, pathname);
+            const streamMatch = this.matchStreamingRoute(method, pathname);
+            if (routeMatch) {
                 const query = Object.fromEntries(url.searchParams.entries());
                 try {
                     const body = await parseBody(req);
-                    await match.handler(req, enhancedRes, match.params, query, body);
+                    await routeMatch.handler(req, enhancedRes, routeMatch.params, query, body);
                 }
                 catch (error) {
                     console.error("Handler error:", error);
                     enhancedRes.statusCode = 500;
                     enhancedRes.end("Internal Server Error");
                 }
+            }
+            else if (streamMatch) {
+                // Handle streaming route
+                res.setHeader('Content-Type', 'text/event-stream');
+                res.setHeader('Cache-Control', 'no-cache');
+                res.setHeader('Connection', 'keep-alive');
+                streamMatch.handler(req, res, streamMatch.params, Object.fromEntries(url.searchParams.entries()));
             }
             else {
                 enhancedRes.statusCode = 404;
