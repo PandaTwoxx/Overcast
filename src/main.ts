@@ -2,7 +2,6 @@ import pkg from 'pg';
 const { Pool } = pkg;
 import * as dotenv from 'dotenv';
 import { Router, renderTemplate, enhanceResponse, parseBody, Plugin, RouteHandler, EnhancedServerResponse } from "./nodeHttpRouter"
-import { console } from 'node:inspector';
 
 // Load .env variables
 dotenv.config();
