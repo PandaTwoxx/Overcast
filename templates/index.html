@@ -3,10 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overcast - Home</title>
+    <title>Overcast - ${title}</title>
     <link rel="stylesheet" href="public/output.css">
 </head>
 <body>
-    
+    <nav class="flex justify-between items-center py-4 px-6 bg-white dark:bg-black shadow-sm">
+        <a href="/" class="text-pretty text-lg font-semibold text-gray-900 dark:text-white">Overcast</a>
+        <div class="flex items-center"></div>
+            <a href="/about" class="text-gray-900 dark:text-white mr-4">About</a>
+            <a href="/contact" class="text-gray-900 dark:text-white">Contact</a>
+        </div>
+    </nav>
+    {if(isDevMode){
+        <script>
+            const eventSource = new EventSource('/live-index');
+
+            eventSource.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                if (data.html) {
+                    document.getElementById('content').innerHTML = data.html;
+                } else if (data.error) {
+                    console.error('Error from server:', data.error);
+                }
+            };
+
+            eventSource.onerror = function(error) {
+                console.error('EventSource failed:', error);
+                eventSource.close(); // Optionally close the connection on error
+            };
+        </script>
+    }}
 </body>
 </html>
