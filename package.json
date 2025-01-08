@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "test",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "dev": "node dist/dev.js"
   },
   "repository": {
     "type": "git",
