@@ -1,10 +1,12 @@
 import { readFile } from "node:fs/promises";
 import * as http from "node:http";
-import { join, resolve } from "node:path";
+import { join, resolve, dirname } from "node:path";
 import { parse as parseQueryString } from "node:querystring";
-import { URL } from "node:url";
+import { URL, fileURLToPath } from "node:url";
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { lookup as mimeLookup } from 'mime-types';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 // Template rendering utility
 async function renderTemplate(templatePath, context = {}) {
     try {
@@ -277,7 +279,7 @@ class Router {
         const results = [];
         testCases.forEach(testCase => {
             try {
-                const matchResult = this.matchRoute(testCase.method, testCase.path);
+                const matchResult = this.matchRoute(testCase.method, testCase.path) || this.matchStreamingRoute(testCase.method, testCase.path);
                 const passed = testCase.expectedMatch
                     ? matchResult !== null
                     : matchResult === null;
