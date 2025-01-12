@@ -26,6 +26,7 @@
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
+    "mime-types": "^2.1.35",
     "pg": "^8.13.1",
     "typescript": "^5.7.2"
   },
