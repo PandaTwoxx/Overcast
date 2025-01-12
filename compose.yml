@@ -4,6 +4,8 @@ services:
     build: .
     depends_on:
       - postgres
+    ports:
+      - "8000:8000"
   postgres:
     image: postgres:latest
     container_name: postgres_container
