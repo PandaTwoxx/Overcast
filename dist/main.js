@@ -63,7 +63,7 @@ router.addRoute('GET', '/stream', (req, res) => {
         res.end();
     });
 });
-router.addDirectory('public');
+router.addDirectory('../public');
 const server = router.createServer();
 console.log("hi :)");
 server.listen(8000, '0.0.0.0', () => {
