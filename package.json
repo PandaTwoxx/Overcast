@@ -1,40 +1,28 @@
 {
-  "name": "nodejs-template",
-  "version": "1.0.0",
-  "description": "A node Router",
-  "main": "index.js",
-  "type": "module",
+  "name": "overcast",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "test",
-    "start": "node dist/main.js",
-    "dev": "node dist/dev.js"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PandaTwoxx/NodeJS-Template.git"
-  },
-  "keywords": [
-    "node",
-    "router"
-  ],
-  "author": "Weston Gorczyca",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/PandaTwoxx/NodeJS-Template/issues"
-  },
-  "homepage": "https://github.com/PandaTwoxx/NodeJS-Template#readme",
   "dependencies": {
-    "cookie-parser": "^1.4.7",
-    "dotenv": "^16.4.7",
-    "mime-types": "^2.1.35",
-    "pg": "^8.13.1",
-    "typescript": "^5.7.2"
+    "next": "15.1.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/cookie-parser": "^1.4.8",
-    "@types/mime-types": "^2.1.4",
-    "@types/node": "^22.10.1",
-    "@types/pg": "^8.11.10",
-    "tailwindcss": "^3.4.17"
+    "@eslint/eslintrc": "^3",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
