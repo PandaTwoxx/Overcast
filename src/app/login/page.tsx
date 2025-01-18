@@ -11,7 +11,7 @@ export default function LoginPage() {
           <body class="h-full">
           ```
         */}
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-16 lg:px-8">
+        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <Image
               alt="Vercel logo"
@@ -79,7 +79,7 @@ export default function LoginPage() {
 
             <p className="mt-10 text-center text-sm/6 text-gray-500">
               Not a member?{' '}
-              <a href="#" className="font-semibold dark:text-white hover:text-gray-500 text-gray-800">
+              <a href="/signup" className="font-semibold dark:text-white hover:text-gray-500 text-gray-800">
                 Sign up now
               </a>
             </p>
