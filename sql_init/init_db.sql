@@ -12,9 +12,7 @@ CREATE TABLE users (
     lastname varchar(255) NOT NULL,
     username varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
-    email varchar(255) NOT NULL,
-    CONSTRAINT unique_username UNIQUE(username),
-    CONSTRAINT unique_email UNIQUE(email)
+    CONSTRAINT unique_username UNIQUE(username)
 );
 
 CREATE TABLE topics(
