@@ -1,10 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  webpack: (config) => {
-    config.experiments = { ...config.experiments, topLevelAwait: true };
-    return config;
-  },
+const nextConfig = {
+  // Add config here
 };
 
-export default nextConfig;
+module.exports = nextConfig;
