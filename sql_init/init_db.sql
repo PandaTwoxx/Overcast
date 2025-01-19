@@ -4,27 +4,28 @@ DROP DATABASE IF EXISTS overcast;
 CREATE DATABASE overcast;
 
 
-USE overcast;
-
+-- Create the users table
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    firstname varchar(255) NOT NULL,
-    lastname varchar(255) NOT NULL,
-    username varchar(255) NOT NULL,
-    password varchar(255) NOT NULL,
+    id SERIAL PRIMARY KEY,  -- Use SERIAL for auto-incrementing integers
+    firstname VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     CONSTRAINT unique_username UNIQUE(username)
 );
 
-CREATE TABLE topics(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    topic varchar(255) NOT NULL,
-    description varchar(255),
-    upVotes INT NOT NULL,
-    downVotes INT NOT NULL
+-- Create the topics table
+CREATE TABLE topics (
+    id SERIAL PRIMARY KEY,
+    topic VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
+    upVotes INT NOT NULL DEFAULT 0,  -- Add default values for upVotes and downVotes
+    downVotes INT NOT NULL DEFAULT 0
 );
 
-CREATE TABLE votes(
-    id INT AUTO_INCREMENT PRIMARY KEY,
+-- Create the votes table
+CREATE TABLE votes (
+    id SERIAL PRIMARY KEY,
     topic_id INT NOT NULL,
     user_id INT NOT NULL,
     vote BOOLEAN NOT NULL, -- True = UpVote, False = DownVote
