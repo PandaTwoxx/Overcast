@@ -1,5 +1,4 @@
-import pg from 'pg';
-const { Client } = pg;
+import { Client } from 'pg';
 import 'dotenv/config';
 
 const dbUrl = process.env.DATABASE_URL || 'fake-database-url-please-replace-me';
