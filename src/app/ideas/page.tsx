@@ -1,4 +1,4 @@
-import queryDatabase from '@/api/voting';
+import queryDatabase from '@/api/query';
 
 export default async function Ideas() {
     const query = 'SELECT * FROM users';
