@@ -1,6 +1,7 @@
 import queryDatabase from '@/api/query';
 
 async function addVote(userId: number, postId: number, vote: boolean){
+    if((await queryDatabase("SELECT * FROM votes WHERE user_id=$1 and topic_id=$2", [userId, postId])).rows.length > 0){return}
     try{
         await queryDatabase("INSERT INTO votes(topic_id, user_id, vote) VALUES ($1, $2, $3);", [postId, userId, vote]);
         const result = await queryDatabase("SELECT * FROM topics WHERE id = $1;", [postId]);
@@ -41,6 +42,11 @@ async function deleteVote(postId: number, userId: number){
     }
 }
 
+async function changeVote(postId: number, userId: number, vote: boolean){
+    await deleteVote(postId, userId);
+    await addVote(postId, userId, vote);
+}
+
 async function getVotes(userId: number){
     return (await queryDatabase("SELECT * FROM votes WHERE user_id = $1", [userId])).rows[0];
 }
@@ -53,6 +59,4 @@ async function getUserPostVotes(postId: number, userId: number){
     return (await queryDatabase("SELECT * FROM votes WHERE topic_id = $1 AND user_id = $2", [postId, userId])).rows[0];
 }
 
-
-// eslint-disable-next-line import/no-anonymous-default-export
-export default { addVote, countVotes, deleteVote, getVotes, getPostVotes, getUserPostVotes };
+export { addVote, countVotes, deleteVote, changeVote, getVotes, getPostVotes, getUserPostVotes };

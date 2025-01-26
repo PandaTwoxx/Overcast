@@ -1,6 +1,6 @@
-DROP TABLE votes;
-DROP TABLE users;
-DROP TABLE topics;
+DROP TABLE IF EXISTS votes;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS topics;
 
 
 -- Create the users table
