@@ -23,7 +23,7 @@ export default function Navbar({ navigation }: { navigation: { name: string; hre
             <div className="flex shrink-0 items-center">
               <Image
                 alt="Logo"
-                src="vercel.svg"
+                src="/vercel.svg"
                 className="h-8 w-auto"
                 width={24}
                 height={24}
