@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <>
-      <footer className="bg-black text-gray-400 py-8">
+      <footer className="dark:bg-black text-gray-400 py-8 bg-orange-100">
         <div className="container mx-auto px-4">
           {/* Centered Content */}
           <div className="flex flex-col items-center space-y-4">
@@ -35,11 +35,12 @@ export default function Footer() {
               <Image
                 src="/vercel.svg" // Replace with your actual logo path
                 alt="Company Logo"
+                className="invert dark:invert-0"
                 width={24}
                 height={24}
               />
               <p className="text-gray-500 text-sm text-center">
-                © 2025 Your Company, Inc. All rights reserved.
+                © 2025 Overcast, Inc. All rights reserved.
               </p>
             </div>
           </div>
