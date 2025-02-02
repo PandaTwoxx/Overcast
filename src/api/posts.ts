@@ -17,9 +17,9 @@ async function getPostsVotes(postId: number, vote: boolean){
     }
 }
 
-async function deletePost(userId: number, postId: number){
+async function deletePost(postId: number){
     try {
-        await queryDatabase("DELETE FROM topics WHERE id = $1 AND userid", [postId, userId]);
+        await queryDatabase("DELETE FROM topics WHERE id = $1", [postId]);
         await queryDatabase("DELETE FROM votes WHERE topic_id = $1", [postId]);
     } catch(error){
         console.error(error);
@@ -27,8 +27,11 @@ async function deletePost(userId: number, postId: number){
 }
 
 async function getUserPost(userId: number){
-    return (await queryDatabase("SELECT * FROM topics WHERE id = $1", [userId]));
+    return (await queryDatabase("SELECT * FROM topics WHERE userid = $1", [userId]));
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default { newPost, getPostsVotes, deletePost, getUserPost };
+async function getPostId(userId: number, topic: string, description: string){
+    return (await queryDatabase("SELECT * FROM topics WHERE userid = $1 AND topic = $2 AND description = $3", [userId, topic, description]));
+}
+
+export { newPost, getPostsVotes, deletePost, getUserPost, getPostId };
