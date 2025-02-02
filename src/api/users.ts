@@ -30,7 +30,9 @@ async function getUserId(username: string) {
     return Number(result.rows[0].id);
 }
 
+async function getUsername(userId: string) {
+    const result = await queryDatabase("SELECT * FROM users WHERE id = $1", [userId]);
+    return result.rows[0].username;
+}
 
-
-// eslint-disable-next-line import/no-anonymous-default-export
-export default { createUser, verifyUsername, checkPassword, deleteUser, getUserId };
+export { createUser, verifyUsername, checkPassword, deleteUser, getUserId , getUsername };
