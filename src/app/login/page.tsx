@@ -42,7 +42,7 @@ function LoginPage() {
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action={formAction} method="POST" className="space-y-6">
+            <form action={formAction} className="space-y-6">
               <div>
                 <label htmlFor="username" className="block text-sm/6 font-medium dark:text-white text-gray-800">
                   Username
