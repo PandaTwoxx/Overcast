@@ -1,14 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { useActionState } from 'react';
+import {Suspense, useActionState} from 'react';
 import { authenticate } from '@/actions';
 import { useSearchParams } from 'next/navigation';
 import {
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 
-export default function LoginPage() {
+function LoginPage() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
   const [errorMessage, formAction, isPending] = useActionState(
@@ -110,3 +110,11 @@ export default function LoginPage() {
       </>
     )
   }
+
+export default function Login(){
+  return (
+      <Suspense>
+        <LoginPage />
+      </Suspense>
+  )
+}

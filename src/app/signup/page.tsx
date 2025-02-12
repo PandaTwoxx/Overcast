@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image"
-import { useActionState } from 'react';
+import {Suspense, useActionState} from 'react';
 import { signUp } from '@/actions';
 import { useSearchParams } from 'next/navigation';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
@@ -9,7 +9,7 @@ import {
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 
-export default function SignupPage() {
+function SignupPage() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
   const [errorMessage, formAction, isPending] = useActionState(
@@ -136,4 +136,12 @@ export default function SignupPage() {
             </div>
         </>
     )
+}
+
+export default function Signup(){
+  return (
+      <Suspense>
+        <SignupPage />
+      </Suspense>
+  )
 }
