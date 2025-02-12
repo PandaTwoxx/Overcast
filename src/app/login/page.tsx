@@ -1,7 +1,22 @@
-import Image from 'next/image'
+'use client';
+
+import Image from 'next/image';
+import { useActionState } from 'react';
+import { authenticate } from '@/actions';
+import { useSearchParams } from 'next/navigation';
+import {
+  ExclamationCircleIcon,
+} from '@heroicons/react/24/outline';
 
 export default function LoginPage() {
-    return (
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const [errorMessage, formAction, isPending] = useActionState(
+      authenticate,
+      undefined,
+  );
+
+  return (
       <>
         {/*
           This example requires updating your template:
@@ -27,7 +42,7 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="#" method="POST" className="space-y-6">
+            <form action={formAction} method="POST" className="space-y-6">
               <div>
                 <label htmlFor="username" className="block text-sm/6 font-medium dark:text-white text-gray-800">
                   Username
@@ -66,11 +81,12 @@ export default function LoginPage() {
                   />
                 </div>
               </div>
-
+              <input type="hidden" name="redirectTo" value={callbackUrl} />
               <div>
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-green-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  aria-disabled={isPending}
                 >
                   Sign in
                 </button>
@@ -83,6 +99,12 @@ export default function LoginPage() {
                 Sign up now
               </a>
             </p>
+            {errorMessage && (
+                <>
+                  <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+                  <p className="text-sm text-red-500">{errorMessage}</p>
+                </>
+            )}
           </div>
         </div>
       </>

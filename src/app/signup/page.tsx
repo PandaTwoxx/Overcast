@@ -1,6 +1,21 @@
-import Image from "next/image"
+"use client";
 
-export default function SignupPage(){
+import Image from "next/image"
+import { useActionState } from 'react';
+import { signUp } from '@/actions';
+import { useSearchParams } from 'next/navigation';
+import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import {
+  ExclamationCircleIcon,
+} from '@heroicons/react/24/outline';
+
+export default function SignupPage() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const [errorMessage, formAction, isPending] = useActionState(
+      signUp,
+      undefined,
+  );
     return (
         <>
             {/*
@@ -27,7 +42,7 @@ export default function SignupPage(){
               </div>
 
               <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form action="#" method="POST" className="space-y-6">
+                <form action={formAction} className="space-y-6">
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-3">
                           <label htmlFor="first-name" className="block text-sm/6 font-medium text-gray-800 dark:text-white">
@@ -94,11 +109,13 @@ export default function SignupPage(){
                   </div>
 
                   <div>
+                    <input type="hidden" name="redirectTo" value={callbackUrl} />
                     <button
                       type="submit"
                       className="flex w-full justify-center rounded-md bg-green-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      aria-disabled={isPending}
                     >
-                      Sign up
+                      Sign up <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
                     </button>
                   </div>
                 </form>
@@ -109,6 +126,12 @@ export default function SignupPage(){
                     Sign in
                   </a>
                 </p>
+                {errorMessage && (
+                    <>
+                      <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+                      <p className="text-sm text-red-500">{errorMessage}</p>
+                    </>
+                )}
               </div>
             </div>
         </>
