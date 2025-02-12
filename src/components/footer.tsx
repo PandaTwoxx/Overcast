@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { signOut } from '@/auth';
 
 export default function Footer() {
   return (
@@ -28,6 +29,16 @@ export default function Footer() {
               <a href="#" className="hover:text-gray-200">
                 Partners
               </a>
+              <form
+                  action={async () => {
+                    'use server';
+                    await signOut({ redirectTo: '/' });
+                  }}
+              >
+                <button className="hover:text-gray-200">
+                  <div className="hidden md:block">Sign Out</div>
+                </button>
+              </form>
             </div>
 
             {/* Logo and Copyright */}
