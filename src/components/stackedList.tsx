@@ -1,6 +1,4 @@
 import React from 'react';
-import { JSX } from 'react/jsx-runtime';
-import IntrinsicAttributes = JSX.IntrinsicAttributes;
 import Image from 'next/image';
 
 interface PostData {
@@ -13,7 +11,7 @@ interface PostData {
 }
 
 interface StackedListProps {
-    posts: (IntrinsicAttributes & PostData)[];
+    posts: (PostData)[];
 }
 
 const StackedList: React.FC<StackedListProps> = ({ posts }) => {
