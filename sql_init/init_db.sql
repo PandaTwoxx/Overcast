@@ -6,10 +6,10 @@ DROP TABLE IF EXISTS topics;
 -- Create the users table
 CREATE TABLE users (
                        id SERIAL PRIMARY KEY,  -- Use SERIAL for auto-incrementing integers
-                       firstname VARCHAR(255) NOT NULL,
-                       lastname VARCHAR(255) NOT NULL,
-                       username VARCHAR(255) NOT NULL,
-                       password VARCHAR(255) NOT NULL,
+                       firstname VARCHAR(255) NOT NULL CHECK (LENGTH(firstname) >= 1),
+                       lastname VARCHAR(255) NOT NULL CHECK (LENGTH(lastname) >= 1),
+                       username VARCHAR(255) NOT NULL CHECK (LENGTH(username) >= 1),
+                       password VARCHAR(255) NOT NULL CHECK (LENGTH(password) >= 6),
                        CONSTRAINT unique_username UNIQUE(username)
 );
 
