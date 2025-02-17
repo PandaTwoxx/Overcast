@@ -1,6 +1,8 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Image from "next/image"
+import {signOut} from "@/auth";
+import React from "react";
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -93,12 +95,16 @@ export default function Navbar({ navigation }: { navigation: { name: string; hre
                   </a>
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                  <form
+                      action={async () => {
+                        'use server';
+                        await signOut({ redirectTo: '/' });
+                      }}
                   >
-                    Sign out
-                  </a>
+                    <button className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none">
+                      Sign Out
+                    </button>
+                  </form>
                 </MenuItem>
               </MenuItems>
             </Menu>
