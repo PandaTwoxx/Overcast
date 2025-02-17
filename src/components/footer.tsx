@@ -4,7 +4,6 @@ import { signOut } from '@/auth';
 
 export default function Footer() {
   return (
-    <>
       <footer className="dark:bg-black text-gray-400 py-8 bg-orange-100">
         <div className="container mx-auto px-4">
           {/* Centered Content */}
@@ -57,6 +56,5 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-    </>
   );
 }
