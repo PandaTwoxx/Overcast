@@ -10,7 +10,7 @@ import {
 
 function LoginPage() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const callbackUrl = searchParams.get('callbackUrl') || '/home';
   const [errorMessage, formAction, isPending] = useActionState(
       authenticate,
       undefined,
