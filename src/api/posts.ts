@@ -26,7 +26,7 @@ async function deletePost(postId: number){
     }
 }
 
-async function getUserPost(userId: number){
+async function getUserPost(userId: number | string){
     return (await queryDatabase("SELECT * FROM topics WHERE userid = $1", [userId]));
 }
 

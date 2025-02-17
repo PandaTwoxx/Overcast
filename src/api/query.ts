@@ -9,7 +9,7 @@ export default async function queryDatabase(query: string, params: unknown[] = [
         connectionString: dbUrl
       });
       await client.connect();
-      console.log(client);
+      //console.log(client);
       const result = await client.query(query, params);
       await client.end();
       return result;
