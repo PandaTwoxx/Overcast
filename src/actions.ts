@@ -2,7 +2,7 @@
 
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import { createUser } from "@/api/users";
+import {createUser, verifyUsername} from "@/api/users";
 
 export async function authenticate(
     prevState: string | undefined,
@@ -28,6 +28,8 @@ export async function signUp(
     formData: FormData,
 ){
     try {
+        if(formData.get('username') == null || formData.get('password') == null || formData.get('lastname') == null || formData.get('firstname')){return 'Invalid credentials.';}
+        if(!await verifyUsername((formData.get('username') || '').toString())) return 'Username already exists.';
         await createUser((formData.get('username') || '').toString(), (formData.get('password') || '').toString(), (formData.get('first-name') || '').toString(), (formData.get('last-name') || '').toString());
         await authenticate(prevState, formData);
     } catch (error) {
