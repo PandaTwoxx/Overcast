@@ -10,24 +10,6 @@ export default function Footer() {
           <div className="flex flex-col items-center space-y-4">
             {/* Navigation Links */}
             <div className="flex flex-wrap justify-center space-x-4 md:space-x-8">
-              <a href="#" className="hover:text-gray-200">
-                About
-              </a>
-              <a href="#" className="hover:text-gray-200">
-                Blog
-              </a>
-              <a href="#" className="hover:text-gray-200">
-                Jobs
-              </a>
-              <a href="#" className="hover:text-gray-200">
-                Press
-              </a>
-              <a href="#" className="hover:text-gray-200">
-                Accessibility
-              </a>
-              <a href="#" className="hover:text-gray-200">
-                Partners
-              </a>
               <form
                   action={async () => {
                     'use server';
