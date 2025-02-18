@@ -2,7 +2,9 @@
 
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {createUser, verifyUsername} from "@/api/users";
+import { createUser, verifyUsername } from "@/api/users";
+import { newPost } from "@/api/posts";
+import { redirect } from "next/navigation";
 
 export async function authenticate(
     prevState: string | undefined,
@@ -43,4 +45,13 @@ export async function signUp(
         }
         throw error;
     }
+}
+
+export async function addPost(form: FormData){
+    const topic = String(form.get('name'));
+    const description = String(form.get('description'));
+    if (!topic || !description) {redirect('/home')}
+    await newPost(1, topic, description);
+    //TODO implement dis redirect(yay_screen())
+    return redirect('/ideas');
 }
