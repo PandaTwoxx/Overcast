@@ -1,15 +1,8 @@
-import NextAuth from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import { verifyUsername, checkPassword, getUserId } from '@/api/users'
-
-interface User {
-    id?: string
-    name?: string | null
-    email?: string | null
-    image?: string | null
-}
 
 export const { auth, signIn, signOut } = NextAuth({
     ...authConfig,
@@ -25,8 +18,9 @@ export const { auth, signIn, signOut } = NextAuth({
                     const isUser = await verifyUsername(username);
                     if (!isUser) return null;
                     const passwordsMatch = await checkPassword(username, password);
+                    const id = await getUserId(username);
                     const user: User = {
-                        id: String(await getUserId(username)),
+                        id: String(id),
                         name: username
                     }
                     if (passwordsMatch) return user;

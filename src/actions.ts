@@ -48,10 +48,10 @@ export async function signUp(
 }
 
 export async function addPost(form: FormData){
-    const topic = String(form.get('name'));
+    const topic = String(form.get('topic'));
     const description = String(form.get('description'));
+    const id = Number(form.get('id'));
     if (!topic || !description) {redirect('/home')}
-    await newPost(1, topic, description);
-    //TODO implement dis redirect(yay_screen())
-    return redirect('/ideas');
+    await newPost(id, topic, description);
+    redirect('/ideas');
 }

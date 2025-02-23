@@ -33,6 +33,7 @@ export default async function Ideas() {
             imageUrl: '/vercel.svg', // Replace with actual image URL logic
         }))
     );
+    console.log(user);
     return (
         <>
             <div className="px-5 relative">

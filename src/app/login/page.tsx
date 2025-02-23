@@ -31,8 +31,8 @@ function LoginPage() {
             <Image
               alt="Vercel logo"
               src="/vercel.svg"
-              width={20}
-              height={20}
+              width={40}
+              height={40}
               className="mx-auto h-10 w-auto invert dark:invert-0"
               priority
             />

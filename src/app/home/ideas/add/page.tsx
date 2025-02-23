@@ -40,12 +40,12 @@ export default async function addingPost(){
                           <label htmlFor="description"
                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                               description</label>
-                          <textarea id="description" rows={4}
+                          <textarea id="description" name="description" rows={4}
                                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Write your thoughts here..."></textarea>
                       </div>
                       <div>
-                          <input type="hidden" value={userId}/>
+                          <input type="hidden" name="id" value={userId}/>
                           <button
                               type="submit"
                               className="flex w-full justify-center rounded-md bg-green-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
