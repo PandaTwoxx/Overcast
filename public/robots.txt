@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://overcast.example.com/sitemap.xml
