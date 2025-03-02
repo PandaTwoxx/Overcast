@@ -20,7 +20,8 @@ CREATE TABLE topics (
                         description VARCHAR(255),
                         userid INT NOT NULL,
                         upVotes INT NOT NULL DEFAULT 0,  -- Add default values for upVotes and downVotes
-                        downVotes INT NOT NULL DEFAULT 0
+                        downVotes INT NOT NULL DEFAULT 0,
+                        tags VARCHAR(255) NOT NULL
 );
 
 -- Create the votes table
