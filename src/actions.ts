@@ -55,8 +55,8 @@ export async function addPost(form: FormData){
     const description = String(form.get('description'));
     const id = Number(form.get('id'));
     if (!topic || !description) {redirect('/home')}
-    await newPost(id, topic, description);
     const tags = extractArray(await API.gemini(topic, description))
+    await newPost(id, topic, description, tags.toString());
     redirect('/ideas');
 }
 

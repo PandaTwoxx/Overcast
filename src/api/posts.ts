@@ -1,8 +1,8 @@
 import queryDatabase from '@/api/query';
 
-async function newPost(userId: number, topic: string, description: string){
+async function newPost(userId: number, topic: string, description: string, tags: string){
     try{
-        await queryDatabase("INSERT INTO topics(userid, topic, description) VALUES ($1,$2,$3);", [userId, topic, description]);
+        await queryDatabase("INSERT INTO topics(userid, topic, description, tags) VALUES ($1,$2,$3,$4);", [userId, topic, description, tags]);
     } catch(error){
         console.error(error);
     }
