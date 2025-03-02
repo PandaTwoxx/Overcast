@@ -1,10 +1,15 @@
 import queryDatabase from "@/api/query";
 import { hashPassword, verifyPassword } from "@/api/password";
 
-async function createUser(username: string, password: string, firstName: string, lastName: string): Promise<number> {
-    await queryDatabase("INSERT INTO users(username, password, firstname, lastname) VALUES ($1, $2, $3, $4)", [username, (await hashPassword(password)), firstName, lastName]);
-    const result = await queryDatabase("SELECT * FROM users WHERE username = $1", [username]);
-    return result.rows[0].id;
+async function createUser(username: string, password: string, firstName: string, lastName: string) {
+    try {
+        await queryDatabase("INSERT INTO users(username, password, firstname, lastname) VALUES ($1, $2, $3, $4)", [username, (await hashPassword(password)), firstName, lastName]);
+        const result = await queryDatabase("SELECT * FROM users WHERE username = $1", [username]);
+        return Number(result.rows[0].id);
+    }catch(err) {
+        console.error(err);
+        return undefined;
+    }
 }
 
 async function verifyUsername(username: string){

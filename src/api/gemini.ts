@@ -10,7 +10,6 @@ import 'dotenv/config';
 
   
   const apiKey = process.env.GEMINI_API_KEY || 'fake-api-key-please-replace-me';
-  console.log(process.env)
   if (apiKey == undefined) {
     throw new Error(
       "GEMINI_API_KEY environment variable is not set. Please set it before running this script."

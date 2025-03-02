@@ -12,7 +12,7 @@ export default function Gemini_interface(){
             const geminiResult = await gemini(name, description);
             setTags(geminiResult);
         }
-        getTags();
+        getTags().then(r => {console.log(r);});
     }, [name, description]);
 
     return (

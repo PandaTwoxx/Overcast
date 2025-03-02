@@ -15,7 +15,7 @@
     "@material/web": "^2.2.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "bcryptjs": "^3.0.2",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.7",
     "jose": "^5.9.6",
     "next": "^15.1.6",

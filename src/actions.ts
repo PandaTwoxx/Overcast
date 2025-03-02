@@ -33,10 +33,10 @@ export async function signUp(
     formData: FormData,
 ){
     try {
-        if(formData.get('username') == null || formData.get('password') == null || formData.get('lastname') == null || formData.get('firstname')){return 'Invalid credentials.';}
-        if(!await verifyUsername((formData.get('username') || '').toString())) return 'Username already exists.';
-        await createUser((formData.get('username') || '').toString(), (formData.get('password') || '').toString(), (formData.get('first-name') || '').toString(), (formData.get('last-name') || '').toString());
-        await authenticate(prevState, formData);
+        if(formData.get('username') == null || formData.get('password') == null || formData.get('lastname') == null || formData.get('firstname') == null){return 'Please fill in all fields smart guy.';}
+        if(await verifyUsername(formData.get('username') as string)) return 'Username already exists.';
+        await createUser((formData.get('username') || '').toString(), (formData.get('password') || '').toString(), (formData.get('firstname') || '').toString(), (formData.get('lastname') || '').toString());
+        await signIn('credentials', formData);
     } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {

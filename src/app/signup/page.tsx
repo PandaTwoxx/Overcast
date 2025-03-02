@@ -4,14 +4,14 @@ import Image from "next/image"
 import {Suspense, useActionState} from 'react';
 import { signUp } from '@/actions';
 import { useSearchParams } from 'next/navigation';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import {
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 
 function SignupPage() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const callbackUrl = searchParams.get('callbackUrl') || '/home';
   const [errorMessage, formAction, isPending] = useActionState(
       signUp,
       undefined,
@@ -45,13 +45,13 @@ function SignupPage() {
                 <form action={formAction} className="space-y-6">
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-3">
-                          <label htmlFor="first-name" className="block text-sm/6 font-medium text-gray-800 dark:text-white">
+                          <label htmlFor="firstname" className="block text-sm/6 font-medium text-gray-800 dark:text-white">
                             First name
                           </label>
                           <div className="mt-2">
                             <input
-                              id="first-name"
-                              name="first-name"
+                              id="firstname"
+                              name="firstname"
                               type="text"
                               required
                               autoComplete="given-name"
@@ -61,13 +61,13 @@ function SignupPage() {
                         </div>
 
                         <div className="sm:col-span-3">
-                          <label htmlFor="last-name" className="block text-sm/6 font-medium text-gray-800 dark:text-white">
+                          <label htmlFor="lastname" className="block text-sm/6 font-medium text-gray-800 dark:text-white">
                             Last name
                           </label>
                           <div className="mt-2">
                             <input
-                              id="last-name"
-                              name="last-name"
+                              id="lastname"
+                              name="lastname"
                               type="text"
                               required
                               autoComplete="family-name"
