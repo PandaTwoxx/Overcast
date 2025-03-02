@@ -34,4 +34,12 @@ async function getPostId(userId: number, topic: string, description: string){
     return (await queryDatabase("SELECT * FROM topics WHERE userid = $1 AND topic = $2 AND description = $3", [userId, topic, description]));
 }
 
-export { newPost, getPostsVotes, deletePost, getUserPost, getPostId };
+async function getAllPosts(){
+    return (await queryDatabase("SELECT * FROM topics"));
+}
+
+async function getPost(postId: number){
+    return (await queryDatabase("SELECT * FROM topics WHERE id = $1", [postId]));
+}
+
+export { newPost, getPostsVotes, deletePost, getUserPost, getPostId, getAllPosts, getPost };
