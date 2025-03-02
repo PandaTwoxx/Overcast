@@ -3,8 +3,11 @@
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { createUser, verifyUsername } from "@/api/users";
-import { newPost } from "@/api/posts";
+import { newPost, getAllPosts } from "@/api/posts";
+import { getVotes } from "@/api/votes"
+import * as API from "@/api/gemini"
 import { redirect } from "next/navigation";
+import * as models from "@/lib/models"
 
 export async function authenticate(
     prevState: string | undefined,
@@ -53,5 +56,47 @@ export async function addPost(form: FormData){
     const id = Number(form.get('id'));
     if (!topic || !description) {redirect('/home')}
     await newPost(id, topic, description);
+    const tags = extractArray(await API.gemini(topic, description))
     redirect('/ideas');
+}
+
+function extractArray(outputString: string){
+    // Trim the output:  from the string
+    let trimmedString = outputString.replace(" output: ", "");
+    trimmedString = trimmedString.replace("output: ", "");
+
+    // Remove the square brackets
+    const bracketlessString = trimmedString.substring(1, trimmedString.length - 1);
+
+    // Split the string by commas
+    const stringArray = bracketlessString.split(', ');
+
+    // Remove the quotation marks from each element
+    const finalArray = stringArray.map(str => str.substring(1, str.length - 1));
+
+    // Return the final array
+    return finalArray;
+}
+
+export async function sortPosts(userId: number){
+    const posts = (await getAllPosts()).rows as models.Topic[];
+    const votedPosts = posts;
+    const unvotedPosts: models.Topic[] = [];
+    for(let i = 0; i < posts.length; i++){
+        if(await postVoted(userId, posts[i].id)){
+            votedPosts.push(posts[i]);
+        }else{
+            unvotedPosts.push(posts[i]);
+        }
+    }
+}
+
+async function postVoted(userId: number, postId: number){
+    const votes = (await getVotes(userId)).rows as models.Vote[];
+    for(let i = 0; i < votes.length; i++){
+        if(votes[i].topic_id == postId){
+            return true;
+        }
+    }
+    return false;
 }
