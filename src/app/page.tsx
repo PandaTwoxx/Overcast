@@ -11,12 +11,11 @@ export default function Home() {
           height={57}
           priority
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+        <ul className="list-inside text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">
-            Advanced voting system
+            Overcasting fish
           </li>
-          <li>High speed and comprehensive analytics.</li>
-        </ol>
+        </ul>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a
