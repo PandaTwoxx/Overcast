@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://overcast.tickitechnology.com/sitemap.xml
