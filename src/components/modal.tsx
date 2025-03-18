@@ -94,7 +94,6 @@ const Modal: React.FC<Props> = (props: Props) => {
                             </button>
                             <button
                                 type="button"
-                                data-autofocus="true"
                                 onClick={async () => {
                                     await addVote(post.author.userid, post.id, false)
                                     handleRefresh();
