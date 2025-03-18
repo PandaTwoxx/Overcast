@@ -5,7 +5,8 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/re
 import { PencilIcon } from '@heroicons/react/24/outline'
 import Image from "next/image";
 import { Post } from "@/lib/models";
-import { addVote } from "@/api/votes"
+import { addVote } from "@/api/votes";
+import { useRouter } from "next/navigation";
 
 interface Props{
     post: Post;
@@ -14,8 +15,10 @@ interface Props{
 const Modal: React.FC<Props> = (props: Props) => {
     const [open, setOpen] = useState(false);
     const post = props.post;
+    const router = useRouter();
 
     const handleRefresh = () => {
+        router.refresh();
         window.location.reload();
     }
 
