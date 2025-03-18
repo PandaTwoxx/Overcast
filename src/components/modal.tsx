@@ -84,7 +84,7 @@ const Modal: React.FC<Props> = (props: Props) => {
                             <button
                                 type="button"
                                 onClick={async () => {
-                                    await addVote(post.id, post.author.userid, true)
+                                    await addVote(post.author.userid, post.id, true)
                                     handleRefresh();
                                     setOpen(false);
                                 }}
