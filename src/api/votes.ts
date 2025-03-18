@@ -47,7 +47,8 @@ async function deleteVote(postId: number, userId: number){
 }
 
 async function getVotes(userId: number){
-    return (await queryDatabase("SELECT * FROM votes WHERE user_id = $1", [userId])).rows[0];
+    console.log(userId);
+    return (await queryDatabase("SELECT * FROM votes WHERE user_id = $1", [userId]));
 }
 
 async function getPostVotes(postId: number){

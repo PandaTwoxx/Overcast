@@ -8,6 +8,7 @@ import {getVotes} from "@/api/votes"
 import * as API from "@/api/gemini"
 import {redirect} from "next/navigation";
 import * as models from "@/lib/models"
+import {revalidatePath} from "next/cache";
 
 export async function authenticate(
     prevState: string | undefined,
@@ -78,16 +79,18 @@ function extractArray(outputString: string){
 
 export async function sortPosts(userId: number){
     const posts = (await getAllPosts()) as models.Topic[];
-    const votedPosts = posts;
+    const votedPosts: models.Topic[] = [];
     const unvotedPosts: models.Topic[] = [];
+    console.log(posts.length);
     for(let i = 0; i < posts.length; i++){
+        console.log(i);
         if(await postVoted(userId, posts[i].id)){
             votedPosts.push(posts[i]);
         }else{
             unvotedPosts.push(posts[i]);
         }
     }
-
+    return unvotedPosts;
 }
 
 async function postVoted(userId: number, postId: number){
@@ -98,4 +101,8 @@ async function postVoted(userId: number, postId: number){
         }
     }
     return false;
+}
+
+export async function refreshCache(){
+    revalidatePath('/home/posts');
 }

@@ -5,7 +5,9 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/re
 import { PencilIcon } from '@heroicons/react/24/outline'
 import Image from "next/image";
 import { Post } from "@/lib/models";
-import { addVote } from "@/api/votes"
+import { addVote } from "@/api/votes";
+import { useRouter } from "next/navigation";
+import {refreshCache} from "@/actions";
 
 interface Props{
     post: Post;
@@ -14,9 +16,11 @@ interface Props{
 const Modal: React.FC<Props> = (props: Props) => {
     const [open, setOpen] = useState(false);
     const post = props.post;
+    const router = useRouter();
 
-    const handleRefresh = () => {
-        window.location.reload();
+    const handleRefresh = async () => {
+        await refreshCache();
+        router.push('/home/posts');
     }
 
     return (
@@ -84,25 +88,24 @@ const Modal: React.FC<Props> = (props: Props) => {
                             <button
                                 type="button"
                                 onClick={async () => {
-                                    await addVote(post.id, post.author.userid, true)
+                                    await addVote(post.author.userid, post.id, true)
                                     handleRefresh();
                                     setOpen(false);
                                 }}
                                 className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-green-700 sm:ml-3 sm:w-auto"
                             >
-                                Upvote
+                                Up Vote
                             </button>
                             <button
                                 type="button"
-                                data-autofocus="true"
                                 onClick={async () => {
-                                    await addVote(post.id, post.author.userid, false)
+                                    await addVote(post.author.userid, post.id, false)
                                     handleRefresh();
                                     setOpen(false);
                                 }}
                                 className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto"
                             >
-                                Downvote
+                                Down Vote
                             </button>
                         </div>
                     </DialogPanel>

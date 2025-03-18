@@ -1,6 +1,7 @@
 'use server';
 
-import { getUser } from "@/api/users";
+import {getUser, getUsername} from "@/api/users";
+import {getPost} from "@/api/posts";
 
 export interface User {
     id: number;
@@ -42,6 +43,34 @@ export interface Post {
     }
 }
 
+export interface FormattedVote {
+    id: number;
+    topic_id: number;
+    user_id: number;
+    vote: boolean;
+    name: string;
+    description: string;
+    author: {
+        username: string;
+        imageUrl: string;
+    }
+}
+
+export async function formatVote(vote: Vote) {
+    const post = (await getPost(vote.topic_id)).rows[0] as Topic;
+    return ({
+        id: vote.id,
+        topic_id: vote.topic_id,
+        user_id: vote.user_id,
+        vote: vote.vote,
+        name: post.topic,
+        description: post.description,
+        author: {
+            username: await getUsername(String(post.userid))
+        }
+    }) as FormattedVote;
+}
+
 export async function formatPost(post: Topic) {
     const user = (await getUser(String(post.userid))) as User;
     return ({
@@ -57,5 +86,5 @@ export async function formatPost(post: Topic) {
             downvotes: String(post.downvotes),
             imageUrl: '/vercel.svg'
         }
-    })
+    }) as Post;
 }
