@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Post } from "@/lib/models";
 import { addVote } from "@/api/votes";
 import { useRouter } from "next/navigation";
+import {refreshCache} from "@/actions";
 
 interface Props{
     post: Post;
@@ -17,9 +18,9 @@ const Modal: React.FC<Props> = (props: Props) => {
     const post = props.post;
     const router = useRouter();
 
-    const handleRefresh = () => {
-        router.refresh();
-        window.location.reload();
+    const handleRefresh = async () => {
+        await refreshCache();
+        router.push('/home/posts');
     }
 
     return (
@@ -93,7 +94,7 @@ const Modal: React.FC<Props> = (props: Props) => {
                                 }}
                                 className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-green-700 sm:ml-3 sm:w-auto"
                             >
-                                Upvote
+                                Up Vote
                             </button>
                             <button
                                 type="button"
@@ -104,7 +105,7 @@ const Modal: React.FC<Props> = (props: Props) => {
                                 }}
                                 className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto"
                             >
-                                Downvote
+                                Down Vote
                             </button>
                         </div>
                     </DialogPanel>

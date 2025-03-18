@@ -1,19 +1,30 @@
-import { getAllPosts } from "@/api/posts";
 import { Topic, Post, formatPost } from "@/lib/models";
 import Item from "@/components/modal"
-
-
-const posts: Post[] = [];
-
-const allPosts = (await getAllPosts()) as Topic[];
-
-allPosts.forEach(async (post) => {
-    posts.push(await formatPost(post));
-});
+import {sortPosts} from "@/actions";
+import {auth} from "@/auth";
+import {redirect} from "next/navigation";
+import {User} from "next-auth";
+import {getUserId} from "@/api/users";
 
 
 
-export default function Grid() {
+
+export default async function Grid() {
+    const posts: Post[] = [];
+
+    const currentSession = await auth();
+
+    if (!currentSession?.user) {
+        redirect('/login'); // Or handle unauthenticated state as needed
+    }
+    const user: User = currentSession.user;
+    const userId = await getUserId(user.name || "");
+
+    const allPosts = (await sortPosts(userId)) as Topic[];
+
+    allPosts.forEach(async (post) => {
+        posts.push(await formatPost(post));
+    });
     return (
         <div className="py-24 sm:py-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">

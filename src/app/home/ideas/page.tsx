@@ -24,7 +24,7 @@ export default async function Ideas() {
     return (
         <>
             <div className="px-5 relative">
-                <h1>Users</h1>
+                <h2 className="text-2xl font-semibold tracking-tight text-pretty text-gray-900 dark:text-white ">My Posts</h2>
                 <StackedList posts={posts}/>
             </div>
 
