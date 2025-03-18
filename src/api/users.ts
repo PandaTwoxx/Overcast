@@ -32,7 +32,7 @@ async function deleteUser(username: string) {
 
 async function getUserId(username: string) {
     const result = await queryDatabase("SELECT * FROM users WHERE username = $1", [username]);
-    return Number(result.rows[0].id);
+    return result.rows[0].id;
 }
 
 async function getUsername(userId: string) {

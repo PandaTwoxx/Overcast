@@ -3,7 +3,9 @@
 import queryDatabase from '@/api/query';
 
 async function addVote(userId: number, postId: number, vote: boolean){
+    console.log("yay");
     if((await queryDatabase("SELECT * FROM votes WHERE user_id=$1 and topic_id=$2", [userId, postId])).rows.length > 0){return}
+    console.log("yay");
     try{
         await queryDatabase("INSERT INTO votes(topic_id, user_id, vote) VALUES ($1, $2, $3);", [postId, userId, vote]);
         const result = await queryDatabase("SELECT * FROM topics WHERE id = $1;", [postId]);
