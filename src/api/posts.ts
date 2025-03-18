@@ -35,7 +35,7 @@ async function getPostId(userId: number, topic: string, description: string){
 }
 
 async function getAllPosts(){
-    return (await queryDatabase("SELECT * FROM topics"));
+    return (await queryDatabase("SELECT * FROM topics")).rows;
 }
 
 async function getPost(postId: number){

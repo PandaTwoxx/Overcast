@@ -1,12 +1,12 @@
 'use server';
 
-import { signIn } from '@/auth';
-import { AuthError } from 'next-auth';
-import { createUser, verifyUsername } from "@/api/users";
-import { newPost, getAllPosts } from "@/api/posts";
-import { getVotes } from "@/api/votes"
+import {signIn} from '@/auth';
+import {AuthError} from 'next-auth';
+import {createUser, verifyUsername} from "@/api/users";
+import {getAllPosts, newPost} from "@/api/posts";
+import {getVotes} from "@/api/votes"
 import * as API from "@/api/gemini"
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 import * as models from "@/lib/models"
 
 export async function authenticate(
@@ -66,20 +66,18 @@ function extractArray(outputString: string){
     trimmedString = trimmedString.replace("output: ", "");
 
     // Remove the square brackets
-    const bracketlessString = trimmedString.substring(1, trimmedString.length - 1);
+    const bracketlessString = trimmedString.substring(1, trimmedString.length - 2);
 
     // Split the string by commas
     const stringArray = bracketlessString.split(', ');
 
     // Remove the quotation marks from each element
-    const finalArray = stringArray.map(str => str.substring(1, str.length - 1));
-
     // Return the final array
-    return finalArray;
+    return stringArray.map(str => str.substring(1, str.length - 1));
 }
 
 export async function sortPosts(userId: number){
-    const posts = (await getAllPosts()).rows as models.Topic[];
+    const posts = (await getAllPosts()) as models.Topic[];
     const votedPosts = posts;
     const unvotedPosts: models.Topic[] = [];
     for(let i = 0; i < posts.length; i++){
@@ -89,6 +87,7 @@ export async function sortPosts(userId: number){
             unvotedPosts.push(posts[i]);
         }
     }
+
 }
 
 async function postVoted(userId: number, postId: number){

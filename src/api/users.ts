@@ -40,4 +40,8 @@ async function getUsername(userId: string) {
     return result.rows[0].username;
 }
 
-export { createUser, verifyUsername, checkPassword, deleteUser, getUserId , getUsername };
+async function getUser(userId: string) {
+    return (await queryDatabase("SELECT * FROM users WHERE id = $1", [userId])).rows[0];
+}
+
+export { createUser, verifyUsername, checkPassword, deleteUser, getUserId, getUsername, getUser };

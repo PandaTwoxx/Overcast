@@ -1,3 +1,5 @@
+'use server';
+
 import queryDatabase from '@/api/query';
 
 async function addVote(userId: number, postId: number, vote: boolean){
@@ -42,11 +44,6 @@ async function deleteVote(postId: number, userId: number){
     }
 }
 
-async function changeVote(postId: number, userId: number, vote: boolean){
-    await deleteVote(postId, userId);
-    await addVote(postId, userId, vote);
-}
-
 async function getVotes(userId: number){
     return (await queryDatabase("SELECT * FROM votes WHERE user_id = $1", [userId])).rows[0];
 }
@@ -59,4 +56,4 @@ async function getUserPostVotes(postId: number, userId: number){
     return (await queryDatabase("SELECT * FROM votes WHERE topic_id = $1 AND user_id = $2", [postId, userId])).rows[0];
 }
 
-export { addVote, countVotes, deleteVote, changeVote, getVotes, getPostVotes, getUserPostVotes };
+export { addVote, countVotes, deleteVote, getVotes, getPostVotes, getUserPostVotes };
