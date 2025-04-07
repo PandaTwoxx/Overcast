@@ -1,32 +1,32 @@
-'use server';
+'use server'
 
-import {getUser, getUsername} from "@/api/users";
-import {getPost} from "@/api/posts";
+import { getUser, getUsername } from '@/api/users'
+import { getPost } from '@/api/posts'
 
 export interface User {
-    id: number;
-    firstname: string;
-    lastname: string;
-    username: string;
-    password: string;
-  }
-  
-  export interface Topic {
-    id: number;
-    topic: string;
-    description: string;
-    userid: number;
-    upvotes: number;
-    downvotes: number;
-    tags: string;
-  }
-  
-  export interface Vote {
-    id: number;
-    topic_id: number;
-    user_id: number;
-    vote: boolean;
-  }
+    id: number
+    firstname: string
+    lastname: string
+    username: string
+    password: string
+}
+
+export interface Topic {
+    id: number
+    topic: string
+    description: string
+    userid: number
+    upvotes: number
+    downvotes: number
+    tags: string
+}
+
+export interface Vote {
+    id: number
+    topic_id: number
+    user_id: number
+    vote: boolean
+}
 
 export interface Post {
     id: number
@@ -35,7 +35,7 @@ export interface Post {
     date: string
     datetime: string
     author: {
-        userid: number;
+        userid: number
         name: string
         upvotes: string
         downvotes: string
@@ -44,21 +44,21 @@ export interface Post {
 }
 
 export interface FormattedVote {
-    id: number;
-    topic_id: number;
-    user_id: number;
-    vote: boolean;
-    name: string;
-    description: string;
+    id: number
+    topic_id: number
+    user_id: number
+    vote: boolean
+    name: string
+    description: string
     author: {
-        username: string;
-        imageUrl: string;
+        username: string
+        imageUrl: string
     }
 }
 
 export async function formatVote(vote: Vote) {
-    const post = (await getPost(vote.topic_id)).rows[0] as Topic;
-    return ({
+    const post = (await getPost(vote.topic_id)).rows[0] as Topic
+    return {
         id: vote.id,
         topic_id: vote.topic_id,
         user_id: vote.user_id,
@@ -66,14 +66,14 @@ export async function formatVote(vote: Vote) {
         name: post.topic,
         description: post.description,
         author: {
-            username: await getUsername(String(post.userid))
-        }
-    }) as FormattedVote;
+            username: await getUsername(String(post.userid)),
+        },
+    } as FormattedVote
 }
 
 export async function formatPost(post: Topic) {
-    const user = (await getUser(String(post.userid))) as User;
-    return ({
+    const user = (await getUser(String(post.userid))) as User
+    return {
         id: post.id,
         title: post.topic,
         description: post.description,
@@ -84,7 +84,7 @@ export async function formatPost(post: Topic) {
             name: user.username,
             upvotes: String(post.upvotes),
             downvotes: String(post.downvotes),
-            imageUrl: '/vercel.svg'
-        }
-    }) as Post;
+            imageUrl: '/vercel.svg',
+        },
+    } as Post
 }

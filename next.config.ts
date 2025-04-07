@@ -1,5 +1,5 @@
 const nextConfig = {
-  // Add config here
-};
+    // Add config here
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

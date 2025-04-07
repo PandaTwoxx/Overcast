@@ -1,26 +1,30 @@
-import React from 'react';
+import React from 'react'
 
-export default function Card ({ children, elevation = "md", className, ...props }: {
-  children: React.ReactNode;
-  elevation?: "sm" | "md" | "lg" | "xl" | "2xl" | "none";
-  className?: string;
+export default function Card({
+    children,
+    elevation = 'md',
+    className,
+    ...props
+}: {
+    children: React.ReactNode
+    elevation?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'none'
+    className?: string
 }) {
-  const elevationClasses = {
-    sm: "shadow-sm",
-    md: "shadow-md",
-    lg: "shadow-lg",
-    xl: "shadow-xl",
-    "2xl": "shadow-2xl",
-    none: "shadow-none",
-  };
+    const elevationClasses = {
+        sm: 'shadow-sm',
+        md: 'shadow-md',
+        lg: 'shadow-lg',
+        xl: 'shadow-xl',
+        '2xl': 'shadow-2xl',
+        none: 'shadow-none',
+    }
 
-
-  return (
-    <div
-      className={`bg-white rounded-lg overflow-hidden ${elevationClasses[elevation] || elevationClasses.md} ${className}`}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
+    return (
+        <div
+            className={`bg-white rounded-lg overflow-hidden ${elevationClasses[elevation] || elevationClasses.md} ${className}`}
+            {...props}
+        >
+            {children}
+        </div>
+    )
+}
