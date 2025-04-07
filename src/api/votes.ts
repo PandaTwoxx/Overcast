@@ -3,7 +3,7 @@
 import queryDatabase from '@/api/query'
 
 async function addVote(userId: number, postId: number, vote: boolean) {
-    console.log('yay')
+    //console.log('yay')
     if (
         (
             await queryDatabase(
@@ -14,7 +14,7 @@ async function addVote(userId: number, postId: number, vote: boolean) {
     ) {
         return
     }
-    console.log('yay')
+    //console.log('yay')
     try {
         await queryDatabase(
             'INSERT INTO votes(topic_id, user_id, vote) VALUES ($1, $2, $3);',
@@ -83,7 +83,7 @@ async function deleteVote(postId: number, userId: number) {
 }
 
 async function getVotes(userId: number) {
-    console.log(userId)
+    //console.log(userId)
     return await queryDatabase('SELECT * FROM votes WHERE user_id = $1', [
         userId,
     ])

@@ -23,7 +23,6 @@ function Loading(){
 
 export default async function Grid() {
     const posts: Post[] = []
-
     const currentSession = await auth()
 
     if (!currentSession?.user) {
@@ -34,9 +33,10 @@ export default async function Grid() {
 
     const allPosts = (await sortPosts(userId)) as Topic[]
 
-    allPosts.forEach(async (post) => {
-        posts.push(await formatPost(post))
-    })
+    for(let i = 0; i < allPosts.length; i++){
+        const post = await formatPost(allPosts[i])
+        posts.push(post);
+    }
     return (
         <Suspense fallback={<Loading />}>
         <div className="py-24 sm:py-32">

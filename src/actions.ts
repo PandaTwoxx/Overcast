@@ -97,17 +97,20 @@ function extractArray(outputString: string) {
 
 export async function sortPosts(userId: number) {
     const posts = (await getAllPosts()) as models.Topic[]
+    //console.log(posts)
     const votedPosts: models.Topic[] = []
     const unvotedPosts: models.Topic[] = []
-    console.log(posts.length)
+    //console.log(posts.length)
     for (let i = 0; i < posts.length; i++) {
-        console.log(i)
+        //console.log(i)
         if (await postVoted(userId, posts[i].id)) {
             votedPosts.push(posts[i])
         } else {
             unvotedPosts.push(posts[i])
         }
     }
+    //console.log('Voted posts:', votedPosts)
+    //console.log('Unvoted posts:', unvotedPosts)
     return unvotedPosts
 }
 
