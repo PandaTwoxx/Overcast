@@ -21,9 +21,9 @@ async function getPostsVotes(postId: number, vote: boolean) {
         postId,
     ])
     if (vote) {
-        return result.rows[0].upVotes
+        return result.rows[0].upvotes
     } else {
-        return result.rows[0].downVotes
+        return result.rows[0].downvotes
     }
 }
 

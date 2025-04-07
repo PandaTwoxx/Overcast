@@ -19,8 +19,8 @@ CREATE TABLE topics (
                         topic VARCHAR(255) NOT NULL,
                         description VARCHAR(255),
                         userid INT NOT NULL,
-                        upVotes INT NOT NULL DEFAULT 0,  -- Add default values for upVotes and downVotes
-                        downVotes INT NOT NULL DEFAULT 0,
+                        upvotes INT NOT NULL DEFAULT 0,  -- Add default values for upvotes and downvotes
+                        downvotes INT NOT NULL DEFAULT 0,
                         tags VARCHAR(255) NOT NULL
 );
 

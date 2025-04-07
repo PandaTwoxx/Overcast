@@ -26,13 +26,13 @@ async function addVote(userId: number, postId: number, vote: boolean) {
         )
         if (vote) {
             await queryDatabase(
-                'UPDATE topics SET upVotes = $1 WHERE id = $2;',
-                [result.rows[0].upVotes + 1, postId]
+                'UPDATE topics SET upvotes = $1 WHERE id = $2;',
+                [result.rows[0].upvotes + 1, postId]
             )
         } else {
             await queryDatabase(
-                'UPDATE topics SET downVotes = $1 WHERE id = $2;',
-                [result.rows[0].downVotes + 1, postId]
+                'UPDATE topics SET downvotes = $1 WHERE id = $2;',
+                [result.rows[0].downvotes + 1, postId]
             )
         }
     } catch (e) {
@@ -47,9 +47,9 @@ async function countVotes(postId: number, vote: boolean) {
             [postId]
         )
         if (vote) {
-            return result.rows[0].upVotes
+            return result.rows[0].upvotes
         } else {
-            return result.rows[0].downVotes
+            return result.rows[0].downvotes
         }
     } catch (e) {
         console.error(e)
@@ -68,13 +68,13 @@ async function deleteVote(postId: number, userId: number) {
         )
         if (result.rows[0].vote) {
             await queryDatabase(
-                'UPDATE topics SET upVotes = $1 WHERE id = $2;',
-                [result.rows[0].upVotes - 1, postId]
+                'UPDATE topics SET upvotes = $1 WHERE id = $2;',
+                [result.rows[0].upvotes - 1, postId]
             )
         } else {
             await queryDatabase(
-                'UPDATE topics SET downVotes = $1 WHERE id = $2;',
-                [result.rows[0].downVotes - 1, postId]
+                'UPDATE topics SET downvotes = $1 WHERE id = $2;',
+                [result.rows[0].downvotes - 1, postId]
             )
         }
     } catch (e) {
