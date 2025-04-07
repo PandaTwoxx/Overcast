@@ -2,12 +2,12 @@
 
 import { getVotes } from "@/api/votes";
 import { getUserId } from "@/api/users";
-import StackedList from '@/components/stackedList';
+//import StackedList from '@/components/stackedList';
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { User } from "next-auth";
-import AddButton from '@/components/addButton';
-import {FormattedVote, formatVote, Post, Vote} from "@/lib/models";
+//import AddButton from '@/components/addButton';
+import {FormattedVote, formatVote, /*Post,*/ Vote} from "@/lib/models";
 import VoteList from "@/components/voteList";
 
 export default async function Voting() {

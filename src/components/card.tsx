@@ -4,8 +4,6 @@ export default function Card ({ children, elevation = "md", className, ...props 
   children: React.ReactNode;
   elevation?: "sm" | "md" | "lg" | "xl" | "2xl" | "none";
   className?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any; // Allow any other props
 }) {
   const elevationClasses = {
     sm: "shadow-sm",
