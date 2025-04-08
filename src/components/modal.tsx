@@ -121,8 +121,8 @@ const Modal: React.FC<Props> = (props: Props) => {
                                     type="button"
                                     onClick={async () => {
                                         await addVote(
-                                            post.author.userid,
                                             id,
+                                            post.id,
                                             true
                                         )
                                         handleRefresh()
@@ -136,8 +136,8 @@ const Modal: React.FC<Props> = (props: Props) => {
                                     type="button"
                                     onClick={async () => {
                                         await addVote(
-                                            post.author.userid,
                                             id,
+                                            post.id,
                                             false
                                         )
                                         handleRefresh()
