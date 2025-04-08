@@ -8,7 +8,7 @@ export const authConfig = {
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user
             const isOnDashboard = nextUrl.pathname.startsWith('/home')
-            const isOnHome = nextUrl.pathname.valueOf() === '/';
+            const isOnHome = nextUrl.pathname.valueOf() === '/'
             if (isOnDashboard) {
                 return isLoggedIn
             } else if (isLoggedIn && isOnHome) {

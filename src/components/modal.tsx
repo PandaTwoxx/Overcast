@@ -15,12 +15,14 @@ import { useRouter } from 'next/navigation'
 import { refreshCache } from '@/actions'
 
 interface Props {
-    post: Post
+    post: Post,
+    id: number
 }
 
 const Modal: React.FC<Props> = (props: Props) => {
     const [open, setOpen] = useState(false)
     const post = props.post
+    const id = props.id
     const router = useRouter()
 
     const handleRefresh = async () => {
@@ -120,7 +122,7 @@ const Modal: React.FC<Props> = (props: Props) => {
                                     onClick={async () => {
                                         await addVote(
                                             post.author.userid,
-                                            post.id,
+                                            id,
                                             true
                                         )
                                         handleRefresh()
@@ -135,7 +137,7 @@ const Modal: React.FC<Props> = (props: Props) => {
                                     onClick={async () => {
                                         await addVote(
                                             post.author.userid,
-                                            post.id,
+                                            id,
                                             false
                                         )
                                         handleRefresh()
