@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 import React from 'react'
 import Image from 'next/image'
 import { Post } from '@/lib/models'
-import { deletePost } from '@/api/posts'
+import { deletePost } from '@/api/posts';
 import { useRouter } from 'next/navigation'
 import { refreshCache } from '@/actions'
 
@@ -35,23 +35,12 @@ const StackedList: React.FC<StackedListProps> = ({ posts }) => {
                         <div className="min-w-0 flex-1">
                             <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
                                 &#34;{post.title}&#34; by {post.author.name}
-                                <div className="mt-1 flex items-center gap-x-1.5">
-                                    <div className="flex-none rounded-full bg-blue-500/20 p-1">
-                                        <div className="size-1.5 rounded-full bg-blue-500" />
-                                    </div>
-                                    <button
-                                        className="text-xs/5 text-gray-500"
-                                        onClick={async () => {
-                                            await deletePost(post.id)
-                                            handleRefresh()
-                                        }}
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
                             </h3>
                             <p className="mt-1 text-xs/5 text-gray-500">
                                 {post.description}
+                            </p>
+                            <p className="mt-1 text-xs/5 text-gray-500">
+                                Delete button {"->"}
                             </p>
                         </div>
                     </div>
@@ -71,6 +60,20 @@ const StackedList: React.FC<StackedListProps> = ({ posts }) => {
                             <p className="text-xs/5 text-gray-500">
                                 Down Votes {post.author.downvotes}
                             </p>
+                        </div>
+                        <div className="mt-1 flex items-center gap-x-1.5">
+                            <div className="flex-none rounded-full bg-blue-500/20 p-1">
+                                <div className="size-1.5 rounded-full bg-blue-500" />
+                            </div>
+                            <button
+                                className="text-xs/5 text-gray-500"
+                                onClick={async () => {
+                                    await deletePost(post.id)
+                                    handleRefresh()
+                                }}
+                            >
+                                Delete
+                            </button>
                         </div>
                     </div>
                 </li>
