@@ -66,12 +66,12 @@ const VoteList: React.FC<VoteListProps> = ({ votes }) => {
                                 <div className="flex-none rounded-full bg-blue-500/20 p-1">
                                     <div className="size-1.5 rounded-full bg-blue-500" />
                                 </div>
-                                <p className="text-xs/5 text-gray-500" onClick={() => {
+                                <button className="text-xs/5 text-gray-500" onClick={() => {
                                     deletePost(vote.id);
                                     handleRefresh();
                                 }}>
                                     Delete
-                                </p>
+                                </button>
                             </div>
                     </div>
                 </li>
