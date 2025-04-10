@@ -1,12 +1,22 @@
+'use client';
+
 import React from 'react'
 import Image from 'next/image'
 import { Post } from '@/lib/models'
+import { deletePost } from '@/api/posts';
+import { useRouter } from 'next/navigation'
+import { refreshCache } from '@/actions'
 
 interface StackedListProps {
     posts: Post[]
 }
 
 const StackedList: React.FC<StackedListProps> = ({ posts }) => {
+    const router = useRouter()
+    const handleRefresh = async () => {
+        await refreshCache()
+        router.push('/home/votes')
+    }
     return (
         <ul role="list" className="divide-y divide-gray-100">
             {posts.map((post, index) => (
@@ -47,6 +57,20 @@ const StackedList: React.FC<StackedListProps> = ({ posts }) => {
                             <p className="text-xs/5 text-gray-500">
                                 Down Votes {post.author.downvotes}
                             </p>
+                        </div>
+                        <div className="mt-1 flex items-center gap-x-1.5">
+                            <div className="flex-none rounded-full bg-blue-500/20 p-1">
+                                <div className="size-1.5 rounded-full bg-blue-500" />
+                            </div>
+                            <button
+                                className="text-xs/5 text-gray-500"
+                                onClick={async () => {
+                                    await deletePost(post.id)
+                                    handleRefresh()
+                                }}
+                            >
+                                Delete
+                            </button>
                         </div>
                     </div>
                 </li>
