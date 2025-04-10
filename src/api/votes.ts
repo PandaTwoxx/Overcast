@@ -57,28 +57,24 @@ async function countVotes(postId: number, vote: boolean) {
 }
 
 async function deleteVote(postId: number, userId: number) {
-    try {
-        const result = await queryDatabase(
-            'SELECT * FROM votes WHERE topic_id = $1 AND user_id = $2;',
-            [postId, userId]
-        )
+    const result = await queryDatabase(
+        'SELECT * FROM votes WHERE topic_id = $1 AND user_id = $2;',
+        [postId, userId]
+    )
+    await queryDatabase(
+        'DELETE FROM votes WHERE topic_id = $1 AND user_id = $2;',
+        [postId, userId]
+    )
+    if (result.rows[0].vote) {
         await queryDatabase(
-            'DELETE FROM votes WHERE topic_id = $1 AND user_id = $2;',
-            [postId, userId]
+            'UPDATE topics SET upvotes = $1 WHERE id = $2;',
+            [result.rows[0].upvotes - 1, postId]
         )
-        if (result.rows[0].vote) {
-            await queryDatabase(
-                'UPDATE topics SET upvotes = $1 WHERE id = $2;',
-                [result.rows[0].upvotes - 1, postId]
-            )
-        } else {
-            await queryDatabase(
-                'UPDATE topics SET downvotes = $1 WHERE id = $2;',
-                [result.rows[0].downvotes - 1, postId]
-            )
-        }
-    } catch (e) {
-        console.error(e)
+    } else {
+        await queryDatabase(
+            'UPDATE topics SET downvotes = $1 WHERE id = $2;',
+            [result.rows[0].downvotes - 1, postId]
+        )
     }
 }
 
