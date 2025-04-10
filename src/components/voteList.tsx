@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import React from 'react'
 import Image from 'next/image'
@@ -12,7 +12,7 @@ interface VoteListProps {
 }
 
 const VoteList: React.FC<VoteListProps> = ({ votes }) => {
-    const router = useRouter();
+    const router = useRouter()
     const handleRefresh = async () => {
         await refreshCache()
         router.push('/home/votes')
@@ -63,16 +63,19 @@ const VoteList: React.FC<VoteListProps> = ({ votes }) => {
                             </div>
                         )}
                         <div className="mt-1 flex items-center gap-x-1.5">
-                                <div className="flex-none rounded-full bg-blue-500/20 p-1">
-                                    <div className="size-1.5 rounded-full bg-blue-500" />
-                                </div>
-                                <button className="text-xs/5 text-gray-500" onClick={async () => {
-                                    await deletePost(vote.id);
-                                    handleRefresh();
-                                }}>
-                                    Delete
-                                </button>
+                            <div className="flex-none rounded-full bg-blue-500/20 p-1">
+                                <div className="size-1.5 rounded-full bg-blue-500" />
                             </div>
+                            <button
+                                className="text-xs/5 text-gray-500"
+                                onClick={async () => {
+                                    await deletePost(vote.id)
+                                    handleRefresh()
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </li>
             ))}
