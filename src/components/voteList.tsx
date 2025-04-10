@@ -3,7 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { FormattedVote } from '@/lib/models'
-import { deletePost } from '@/api/posts'
+import { deleteVote } from '@/api/votes'
 import { useRouter } from 'next/navigation'
 import { refreshCache } from '@/actions'
 
@@ -69,7 +69,7 @@ const VoteList: React.FC<VoteListProps> = ({ votes }) => {
                             <button
                                 className="text-xs/5 text-gray-500"
                                 onClick={async () => {
-                                    await deletePost(vote.id)
+                                    await deleteVote(vote.id)
                                     handleRefresh()
                                 }}
                             >
