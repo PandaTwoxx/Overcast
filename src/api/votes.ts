@@ -56,33 +56,34 @@ async function countVotes(postId: number, vote: boolean) {
     }
 }
 
-async function deleteVote(postId: number, userId: number) {
-    // Delete the vote and return its value in a single query
+async function deleteVote(voteId: number) {
+    // Delete the vote by ID and return its details
     const deletedVote = await queryDatabase(
-        'DELETE FROM votes WHERE topic_id = $1 AND user_id = $2 RETURNING vote;',
-        [postId, userId]
-    )
+        'DELETE FROM votes WHERE id = $1 RETURNING vote, topic_id;',
+        [voteId]
+    );
 
     if (deletedVote.rows.length === 0) {
         // No vote to delete
-        throw new Error('Vote not found.')
+        throw new Error('Vote not found.');
     }
 
-    // Update upvotes or downvotes based on the deleted vote
-    const isUpvote = deletedVote.rows[0].vote
+    const { vote: isUpvote, topic_id: topicId } = deletedVote.rows[0];
 
+    // Update upvotes or downvotes based on the deleted vote
     if (isUpvote) {
         await queryDatabase(
             'UPDATE topics SET upvotes = upvotes - 1 WHERE id = $1;',
-            [postId]
-        )
+            [topicId]
+        );
     } else {
         await queryDatabase(
             'UPDATE topics SET downvotes = downvotes - 1 WHERE id = $1;',
-            [postId]
-        )
+            [topicId]
+        );
     }
 }
+
 
 async function getVotes(userId: number) {
     //console.log(userId)
