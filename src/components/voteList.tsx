@@ -15,7 +15,7 @@ const VoteList: React.FC<VoteListProps> = ({ votes }) => {
     const router = useRouter();
     const handleRefresh = async () => {
         await refreshCache()
-        router.push('/home/posts')
+        router.push('/home/votes')
     }
     return (
         <ul role="list" className="divide-y divide-gray-100">
