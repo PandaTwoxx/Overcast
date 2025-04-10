@@ -1,12 +1,20 @@
 import React from 'react'
 import Image from 'next/image'
 import { FormattedVote } from '@/lib/models'
+import { deletePost } from '@/api/posts'
+import { useRouter } from 'next/navigation'
+import { refreshCache } from '@/actions'
 
 interface VoteListProps {
     votes: FormattedVote[]
 }
 
 const VoteList: React.FC<VoteListProps> = ({ votes }) => {
+    const router = useRouter();
+    const handleRefresh = async () => {
+        await refreshCache()
+        router.push('/home/posts')
+    }
     return (
         <ul role="list" className="divide-y divide-gray-100">
             {votes.map((vote, index) => (
@@ -52,6 +60,17 @@ const VoteList: React.FC<VoteListProps> = ({ votes }) => {
                                 </p>
                             </div>
                         )}
+                        <div className="mt-1 flex items-center gap-x-1.5">
+                                <div className="flex-none rounded-full bg-blue-500/20 p-1">
+                                    <div className="size-1.5 rounded-full bg-blue-500" />
+                                </div>
+                                <p className="text-xs/5 text-gray-500" onClick={() => {
+                                    deletePost(vote.id);
+                                    handleRefresh();
+                                }}>
+                                    Delete
+                                </p>
+                            </div>
                     </div>
                 </li>
             ))}
