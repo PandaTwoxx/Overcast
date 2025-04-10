@@ -61,29 +61,28 @@ async function deleteVote(voteId: number) {
     const deletedVote = await queryDatabase(
         'DELETE FROM votes WHERE id = $1 RETURNING vote, topic_id;',
         [voteId]
-    );
+    )
 
     if (deletedVote.rows.length === 0) {
         // No vote to delete
-        throw new Error('Vote not found.');
+        throw new Error('Vote not found.')
     }
 
-    const { vote: isUpvote, topic_id: topicId } = deletedVote.rows[0];
+    const { vote: isUpvote, topic_id: topicId } = deletedVote.rows[0]
 
     // Update upvotes or downvotes based on the deleted vote
     if (isUpvote) {
         await queryDatabase(
             'UPDATE topics SET upvotes = upvotes - 1 WHERE id = $1;',
             [topicId]
-        );
+        )
     } else {
         await queryDatabase(
             'UPDATE topics SET downvotes = downvotes - 1 WHERE id = $1;',
             [topicId]
-        );
+        )
     }
 }
-
 
 async function getVotes(userId: number) {
     //console.log(userId)
