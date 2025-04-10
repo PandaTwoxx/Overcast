@@ -57,26 +57,33 @@ async function countVotes(postId: number, vote: boolean) {
 }
 
 async function deleteVote(postId: number, userId: number) {
-    const result = await queryDatabase(
-        'SELECT * FROM votes WHERE topic_id = $1 AND user_id = $2;',
+    // Delete the vote and return its value in a single query
+    const deletedVote = await queryDatabase(
+        'DELETE FROM votes WHERE topic_id = $1 AND user_id = $2 RETURNING vote;',
         [postId, userId]
-    )
-    await queryDatabase(
-        'DELETE FROM votes WHERE topic_id = $1 AND user_id = $2;',
-        [postId, userId]
-    )
-    if (result.rows[0].vote) {
+    );
+
+    if (deletedVote.rows.length === 0) {
+        // No vote to delete
+        throw new Error('Vote not found.');
+    }
+
+    // Update upvotes or downvotes based on the deleted vote
+    const isUpvote = deletedVote.rows[0].vote;
+
+    if (isUpvote) {
         await queryDatabase(
-            'UPDATE topics SET upvotes = $1 WHERE id = $2;',
-            [result.rows[0].upvotes - 1, postId]
-        )
+            'UPDATE topics SET upvotes = upvotes - 1 WHERE id = $1;',
+            [postId]
+        );
     } else {
         await queryDatabase(
-            'UPDATE topics SET downvotes = $1 WHERE id = $2;',
-            [result.rows[0].downvotes - 1, postId]
-        )
+            'UPDATE topics SET downvotes = downvotes - 1 WHERE id = $1;',
+            [postId]
+        );
     }
 }
+
 
 async function getVotes(userId: number) {
     //console.log(userId)
