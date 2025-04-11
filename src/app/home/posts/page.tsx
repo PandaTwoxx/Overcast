@@ -45,14 +45,14 @@ export default async function Grid() {
 
     const unvotedPosts = (await sortPosts(userId)) as Topic[];
     const allPosts = (await getAllPosts()) as Topic[];
-    unvotedPosts.sort((a, b) => {return (b.upvotes + b.downvotes) - (a.upvotes + a.downvotes)})
+    allPosts.sort((a, b) => {return (b.upvotes + b.downvotes) - (a.upvotes + a.downvotes)})
 
     for (let i = 0; i < allPosts.length; i++) {
         const post = await formatPost(allPosts[i])
         posts.push(post)
     }
     for (let i = 0; i < unvotedPosts.length; i++) {
-        const post = await formatPost(allPosts[i])
+        const post = await formatPost(unvotedPosts[i])
         uposts.push(post)
     }
     return (
