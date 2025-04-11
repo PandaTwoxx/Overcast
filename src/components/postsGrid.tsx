@@ -10,7 +10,7 @@ interface GridProps {
     userId: number
 }
 
-const postGrid: React.FC<GridProps> = ({ unvotedPosts, allPosts, userId }) => {
+const PostGrid: React.FC<GridProps> = ({ unvotedPosts, allPosts, userId }) => {
     const [isChecked, setIsChecked] = useState(false);
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsChecked(event.target.checked); // Update the state based on the checkbox's checked status
@@ -52,4 +52,4 @@ const postGrid: React.FC<GridProps> = ({ unvotedPosts, allPosts, userId }) => {
     )
 }
 
-export default postGrid;
+export default PostGrid;
