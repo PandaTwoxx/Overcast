@@ -4,15 +4,14 @@ import queryDatabase from '@/api/query'
 
 async function addVote(userId: number, postId: number, vote: boolean) {
     //console.log('yay')
+    const prevVote = await queryDatabase(
+        'SELECT * FROM votes WHERE user_id=$1 and topic_id=$2',
+        [userId, postId]
+    );
     if (
-        (
-            await queryDatabase(
-                'SELECT * FROM votes WHERE user_id=$1 and topic_id=$2',
-                [userId, postId]
-            )
-        ).rows.length > 0
+            prevVote.rows.length > 0
     ) {
-        return
+        deleteVote(prevVote.rows[0].id)
     }
     //console.log('yay')
     try {
