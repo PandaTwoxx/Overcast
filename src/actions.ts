@@ -111,6 +111,7 @@ export async function sortPosts(userId: number) {
     }
     //console.log('Voted posts:', votedPosts)
     //console.log('Unvoted posts:', unvotedPosts)
+    unvotedPosts.sort((a, b) => {return (b.upvotes + b.downvotes) - (a.upvotes + a.downvotes)})
     return unvotedPosts
 }
 
