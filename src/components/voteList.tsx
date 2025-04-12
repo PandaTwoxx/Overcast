@@ -73,7 +73,7 @@ const VoteList: React.FC<VoteListProps> = ({ votes }) => {
                                     handleRefresh()
                                 }}
                             >
-                                Delete
+                                Delete My Vote
                             </button>
                         </div>
                     </div>
