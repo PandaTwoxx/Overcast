@@ -72,7 +72,7 @@ const StackedList: React.FC<StackedListProps> = ({ posts }) => {
                                     handleRefresh()
                                 }}
                             >
-                                Delete
+                                Delete My Post
                             </button>
                         </div>
                     </div>
