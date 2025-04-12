@@ -1,11 +1,12 @@
 import { Topic, Post, formatPost } from '@/lib/models'
-import Item from '@/components/modal'
 import { sortPosts } from '@/actions'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { User } from 'next-auth'
 import { getUserId } from '@/api/users'
 import { Suspense } from 'react'
+import PostGrid from '@/components/postsGrid'
+import { getAllPosts } from '@/api/posts'
 
 function Loading() {
     return (
@@ -33,6 +34,7 @@ function Loading() {
 
 export default async function Grid() {
     const posts: Post[] = []
+    const uposts: Post[] = []
     const currentSession = await auth()
 
     if (!currentSession?.user) {
@@ -41,32 +43,21 @@ export default async function Grid() {
     const user: User = currentSession.user
     const userId = await getUserId(user.name || '')
 
-    const allPosts = (await sortPosts(userId)) as Topic[]
+    const unvotedPosts = (await sortPosts(userId)) as Topic[];
+    const allPosts = (await getAllPosts()) as Topic[];
+    allPosts.sort((a, b) => {return (b.upvotes + b.downvotes) - (a.upvotes + a.downvotes)})
 
     for (let i = 0; i < allPosts.length; i++) {
         const post = await formatPost(allPosts[i])
         posts.push(post)
     }
+    for (let i = 0; i < unvotedPosts.length; i++) {
+        const post = await formatPost(unvotedPosts[i])
+        uposts.push(post)
+    }
     return (
         <Suspense fallback={<Loading />}>
-            <div className="py-24 sm:py-32">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto max-w-2xl lg:mx-0">
-                        <h2 className="text-4xl font-semibold tracking-tight text-pretty text-gray-900 dark:text-white sm:text-5xl">
-                            From the post
-                        </h2>
-                        <p className="mt-2 text-lg/8 text-gray-600">
-                            Posts sourced from the community but handpicked for
-                            you.
-                        </p>
-                    </div>
-                    <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                        {posts.map((post) => (
-                            <Item key={post.id} post={post} />
-                        ))}
-                    </div>
-                </div>
-            </div>
+            <PostGrid unvotedPosts={uposts} allPosts={posts} userId={userId}/>
         </Suspense>
     )
 }

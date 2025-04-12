@@ -16,11 +16,13 @@ import { refreshCache } from '@/actions'
 
 interface Props {
     post: Post
+    id: number
 }
 
 const Modal: React.FC<Props> = (props: Props) => {
     const [open, setOpen] = useState(false)
     const post = props.post
+    const id = props.id
     const router = useRouter()
 
     const handleRefresh = async () => {
@@ -118,11 +120,7 @@ const Modal: React.FC<Props> = (props: Props) => {
                                 <button
                                     type="button"
                                     onClick={async () => {
-                                        await addVote(
-                                            post.author.userid,
-                                            post.id,
-                                            true
-                                        )
+                                        await addVote(id, post.id, true)
                                         handleRefresh()
                                         setOpen(false)
                                     }}
@@ -133,11 +131,7 @@ const Modal: React.FC<Props> = (props: Props) => {
                                 <button
                                     type="button"
                                     onClick={async () => {
-                                        await addVote(
-                                            post.author.userid,
-                                            post.id,
-                                            false
-                                        )
+                                        await addVote(id, post.id, false)
                                         handleRefresh()
                                         setOpen(false)
                                     }}

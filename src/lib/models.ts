@@ -84,7 +84,7 @@ export async function formatPost(post: Topic) {
             name: user.username,
             upvotes: String(post.upvotes),
             downvotes: String(post.downvotes),
-            imageUrl: '/vercel.svg',
+            imageUrl: '/overcast.svg',
         },
     } as Post
 }
