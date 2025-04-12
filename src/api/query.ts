@@ -12,8 +12,10 @@ export default async function queryDatabase(
             connectionString: dbUrl,
         })
         await client.connect()
+        await client.query('BEGIN')
         //console.log(client);
         const result = await client.query(query, params)
+        await client.query('COMMIT')
         await client.end()
         return result
     } catch (err) {

@@ -58,6 +58,7 @@ async function getUserId(username: string) {
         'SELECT * FROM users WHERE username = $1',
         [username]
     )
+    //console.log(result)
     return result.rows[0].id
 }
 
