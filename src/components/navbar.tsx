@@ -11,6 +11,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { signOut } from '@/auth'
 import React from 'react'
+import Search from '@/components/search'
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
@@ -68,6 +69,7 @@ export default function Navbar({
                                         {item.name}
                                     </a>
                                 ))}
+                                <Search />
                             </div>
                         </div>
                     </div>
@@ -154,6 +156,7 @@ export default function Navbar({
                             {item.name}
                         </DisclosureButton>
                     ))}
+                    <Search />
                 </div>
             </DisclosurePanel>
         </Disclosure>
