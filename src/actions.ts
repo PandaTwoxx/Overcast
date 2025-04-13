@@ -9,6 +9,7 @@ import * as API from '@/api/gemini'
 import { redirect } from 'next/navigation'
 import * as models from '@/lib/models'
 import { revalidatePath } from 'next/cache'
+import { getUsername } from '@/api/users'
 
 export async function authenticate(
     prevState: string | undefined,
@@ -127,4 +128,29 @@ async function postVoted(userId: number, postId: number) {
 
 export async function refreshCache() {
     revalidatePath('/home/posts')
+}
+
+
+export async function searchPosts(query: string) {
+    query = query.trim();
+    if (!query) {
+        return [];
+    }
+    const posts = (await getAllPosts()) as models.Topic[];
+
+    // Use Promise.all to handle asynchronous filtering
+    const filteredPosts = await Promise.all(
+        posts.map(async (post) => {
+            const username = await getUsername(String(post.userid));
+            return (
+                post.topic.toLowerCase().includes(query.toLowerCase()) ||
+                post.description.toLowerCase().includes(query.toLowerCase()) ||
+                post.tags.toLowerCase().includes(query.toLowerCase()) ||
+                username.toLowerCase().includes(query.toLowerCase())
+            );
+        })
+    );
+
+    // Filter posts based on the resolved boolean values
+    return posts.filter((_, index) => filteredPosts[index]);
 }
