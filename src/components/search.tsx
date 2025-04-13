@@ -1,19 +1,25 @@
+'use client'
+
 import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
+import React, { useState } from 'react'
 
 export default function Search() {
+    const [searchQuery, setSearchQuery] = useState('')
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        'use server'
-        event.preventDefault()
-        const formData = new FormData(event.currentTarget)
-        const searchQuery = formData.get('default-search') as string
-        revalidatePath('/home/search')
-        redirect(`/home/search/${searchQuery}`)
+        event.preventDefault() // Prevent the default form submission behavior
+
+        if (!searchQuery.trim()) {
+            return // Do nothing if the search query is empty
+        }
+
+        redirect(`/home/search?s=${searchQuery}`)
     }
+
     return (
-        <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="flex items-center w-full max-w-md">
             <label
-                htmlFor="default-search"
+                htmlFor="search"
                 className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
             >
                 Search
@@ -38,9 +44,11 @@ export default function Search() {
                 </div>
                 <input
                     type="search"
-                    id="default-search"
+                    id="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)} // Update state on input change
                     className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Search Posts, Votes..."
+                    placeholder="Search"
                     required
                 />
                 <button
