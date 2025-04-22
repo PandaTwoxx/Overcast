@@ -19,6 +19,7 @@ export interface Topic {
     upvotes: number
     downvotes: number
     tags: string
+    time: Date
 }
 
 export interface Vote {
@@ -32,8 +33,7 @@ export interface Post {
     id: number
     title: string
     description: string
-    date: string
-    datetime: string
+    time: Date
     author: {
         userid: number
         name: string
@@ -77,8 +77,7 @@ export async function formatPost(post: Topic) {
         id: post.id,
         title: post.topic,
         description: post.description,
-        date: '',
-        datetime: '',
+        time: post.time,
         author: {
             userid: user.id,
             name: user.username,

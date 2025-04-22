@@ -70,9 +70,11 @@ const Modal: React.FC<Props> = (props: Props) => {
                     <div className="text-sm/6">
                         <p className="font-semibold text-gray-900 dark:text-white">
                             <span className="absolute inset-0" />
-                            {post.author.name}
+                            Created by {post.author.name}
                         </p>
                         <p className="text-gray-600">
+                        on {post.time.toLocaleDateString()}
+                        <br />
                             {'Up: ' +
                                 String(post.author.upvotes) +
                                 ' / Down: ' +
